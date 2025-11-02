@@ -29,7 +29,7 @@ document.getElementById("contact-form").addEventListener("submit", async functio
   try {
   
     /*const url = "http://localhost:2000/sidejob"; // this url is for local database managment */
-    const url = "https://portifolio-fullstack-with-mongodb-atlas-xkxw.onrender.com/contact" 
+    const url = "https://portifolio-fullstack-with-mongodb-atlas-4tjx.onrender.com/contact" 
     const endpointObject = {
       method: "POST", 
       body: sendFormData // making the data sitring
