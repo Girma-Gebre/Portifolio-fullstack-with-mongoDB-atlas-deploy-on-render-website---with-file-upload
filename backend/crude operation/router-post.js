@@ -4,6 +4,8 @@ const express = require("express");
 const mongoose = require('mongoose'); // this must be core module
 const router = express.Router();
 const path = require("path");
+const cloudinary = require("../cloudinary");
+const { type } = require('os');
 
 mongoose.connect(process.env.MONGO_URL, {
   family: 4 // use IPv4
@@ -17,7 +19,8 @@ mongoose.connect(process.env.MONGO_URL)
 const employerSchema = new mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, required: true}, 
-    comment: {type: String, required: true} 
+    comment: {type: String, required: true},
+    fileUrl: {type: String, required: true}
 }); 
  
 // creating "employee" collection in the mongodb and class for object templaten(data from client e.g: req.body).
@@ -30,7 +33,18 @@ const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
  const upload = multer({storage: uploadFileLocation, limits: {fileSize: 5*1024*1024}}); 
 router.post("/contact",upload.single("uploadFile"), async (req,res)=>{ 
     try{ 
-const newBusiness = new sideBuisness(req.body); // creating object from class
+    const result = await cloudinary.uploader.upload(req.file.path, { 
+      folder: "user_files"
+    });
+const newBusiness = new sideBuisness({
+      name: req.body.name,
+      email: req.body.email,
+      comment: req.body.comment,
+      fileUrl: result.secure_url
+    }); // creating object from class
+
+    // Delete local file
+    fs.unlinkSync(req.file.path);
     await newBusiness.save(); // enable the data to save by mongoose and send to mongoDB as BJSON data type.
      res.status(200).json({ Msg: "Data is submitted successfully" }); // ✅ send JSON this is manadatory to work the front end correctly nice!
     }catch(err){
