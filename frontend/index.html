@@ -67,12 +67,13 @@
   <section id="contact" class="container section">
     <h2>Contact Me</h2>
     <form id="contact-form" class="contact-form">
-      <input type="text" placeholder="Your Name"  id="name" required>
-      <input type="email" placeholder="Your Email"  id="email" required>
-      <textarea placeholder="Your Message" id="comment" required></textarea>
-      <input type="file" name="uploadFile" required>
-      <button type="submit" >Send</button>
-    </form>
+      <input type="text" placeholder="Your Name"  name="name" required>
+      <input type="email" placeholder="Your Email"  name="email" required>
+      <textarea placeholder="Your Message" name="comment" required></textarea>
+      <input type="file" accept=".pdf" name="uploadFile" required>
+      <button type="submit">Send</button>
+      <div id="spinner" class="spinner"></div>
+    </form> 
     <p id="dataCheck"></p>
     <!-- Social Icons -->
     <div class="social-links">

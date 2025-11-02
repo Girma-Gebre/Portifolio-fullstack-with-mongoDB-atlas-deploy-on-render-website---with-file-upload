@@ -9,6 +9,9 @@ function scrollToSection(id) {
 const menuToggle = document.getElementById("menu-toggle");
 const navLinks = document.querySelector(".nav-links");
 const display = document.getElementById("dataCheck");
+// for spinner
+const spinner = document.getElementById("spinner");
+const sendContent = document.getElementById("send");
 
 menuToggle.addEventListener("click", () => {
   navLinks.classList.toggle("active");
@@ -17,34 +20,49 @@ menuToggle.addEventListener("click", () => {
 // Contact form handler (demo)
 document.getElementById("contact-form").addEventListener("submit", async function(e){
   e.preventDefault(); //event handler to stop the browser’s default action for that event.
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const comment = document.getElementById("comment").value; 
+  Object.assign(display.style,{
+    display: "none"
+  })
+  spinner.style.display = "block" // show spinner
+ const sendFormData = new FormData(this)
 
   try {
-    // collecting data from html input element
-    const sendData = { name, email, comment }; // using ES6 shorthand object syntax.
+  
     /*const url = "http://localhost:2000/sidejob"; // this url is for local database managment */
-    const url = "https://portifolio-fullstack-with-mongodb-atlas-ixgy.onrender.com/sidejob"; // this url is for cloud database managment
+    const url = "/contact"
     const endpointObject = {
       method: "POST", 
-      headers: {"Content-Type": "application/json"}, 
-      body: JSON.stringify(sendData) // making the data sitring
+      body: sendFormData // making the data sitring
     };
 
     const res = await fetch(url, endpointObject);
     const data = await res.json(); //chaning data into Json format
-    const userFirstName = sendData.name.match(/^[^\s]+/)
-
-  alert(`Thanks "${userFirstName[0]}" for your interest! I’ll contact you soon.`);
-  this.reset();
-  display.style.color = "green";
-  display.innerHTML = "Data is submitted succesfully";
-
+    const userFirstName = sendFormData.get("name").match(/^[^\s]+/); 
+    this.reset();
+    const submitted = "Data is submitted successfully"
+    if(data.Msg === submitted ){
+       alert(`Thanks "${userFirstName[0]}" for your interest! I’ll contact you soon.`)
+       Object.assign(display.style,{
+       display: "block",
+       color: "#2196f3"
+       })
+      display.innerHTML = data.Msg;  
+    } else {
+      Object.assign(display.style,{
+       display: "block",
+       color: "red"
+       })
+       display.innerHTML = `your data is not submitted due to ${data.Msg}`;  
+    }
   }catch(err){
-    console.log(err);
-    display.style.color = "red";
-    display.innerHTML = "The data is not sent";
+    console.error(err);
+    Object.assign(display.style,{
+       display: "block",
+       color: "red"
+       })
+    display.innerHTML = "URL/API not found";
+  }finally{
+   spinner.style.display = "none" // hidden spinner
   }
 
 });
