@@ -5,6 +5,10 @@ const mongoose = require('mongoose'); // this must be core module
 const router = express.Router();
 const path = require("path");
 
+mongoose.connect(process.env.MONGO_URL, {
+  family: 4 // use IPv4
+}); 
+
 // connect the serer (node Js) with mongoDB atlas
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>console.log("Conneted to MongoDB Atlas"))
@@ -17,7 +21,7 @@ const employerSchema = new mongoose.Schema({
 }); 
  
 // creating "employee" collection in the mongodb and class for object templaten(data from client e.g: req.body).
-const employer = mongoose.model("employer", employerSchema);
+const sideBuisness = mongoose.model("sideBuisness", employerSchema);
 const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
   cb(null, path.join(__dirname,"../files"))}, 
  filename: (req, file, cb)=>{
@@ -26,12 +30,12 @@ const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
  const upload = multer({storage: uploadFileLocation, limits: {fileSize: 5*1024*1024}}); 
 router.post("/contact",upload.single("uploadFile"), async (req,res)=>{ 
     try{ 
-const newEmployer = new employer(req.body); // creating object from class
-    await newEmployer.save(); // enable the data to save by mongoose and send to mongoDB as BJSON data type.
+const newBusiness = new sideBuisness(req.body); // creating object from class
+    await newBusiness.save(); // enable the data to save by mongoose and send to mongoDB as BJSON data type.
      res.status(200).json({ Msg: "Data is submitted successfully" }); // ✅ send JSON this is manadatory to work the front end correctly nice!
     }catch(err){
         res.status(500).json({Msg: "internal server error or problem on database connection"});  
     }
-});
+}); 
  
 module.exports = router; 
