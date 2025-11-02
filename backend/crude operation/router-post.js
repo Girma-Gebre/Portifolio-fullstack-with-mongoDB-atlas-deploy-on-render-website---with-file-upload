@@ -4,15 +4,12 @@ const express = require("express");
 const mongoose = require('mongoose'); // this must be core module
 const router = express.Router();
 const path = require("path");
-const cloudinary = require("../cloudinary");
-const { type } = require('os');
-
-mongoose.connect(process.env.MONGO_URL, {
-  family: 4 // use IPv4
-}); 
+const cloudinary = require("../cloudinary.js");
+const fs = require('fs')
 
 // connect the serer (node Js) with mongoDB atlas
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL,{family: 4 // use IPv4 
+    })
 .then(()=>console.log("Conneted to MongoDB Atlas"))
 .catch(err=>console.error('Connection failed', err))
 // create shema
@@ -33,10 +30,12 @@ const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
  const upload = multer({storage: uploadFileLocation, limits: {fileSize: 5*1024*1024}}); 
 router.post("/contact",upload.single("uploadFile"), async (req,res)=>{ 
     try{ 
+        // to upload the user's file to cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, { 
-      folder: "user_files"
+      folder: "user_files",
+       resource_type: "raw"   // important for PDFs, docs, etc.
     });
-const newBusiness = new sideBuisness({
+   const newBusiness = new sideBuisness({
       name: req.body.name,
       email: req.body.email,
       comment: req.body.comment,

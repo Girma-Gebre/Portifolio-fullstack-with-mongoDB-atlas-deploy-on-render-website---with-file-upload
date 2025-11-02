@@ -13,4 +13,4 @@ APP.use('/',postRouter); // enable the router to run
 
 APP.listen(process.env.PORT || port,()=>{      
     console.log(`Server is running on port ${port}`)                                          
-})                                       
+})                                        
