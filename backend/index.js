@@ -4,7 +4,7 @@ const postRouter = require('./crude operation/router-post')
 const path = require("path")
 const APP = express();
 APP.use(express.static(path.join(__dirname, "../frontend"))); // keeping files in the frontend folder
-const port = 2000;
+const port = 4000;
 APP.use(cors())
 // APP.use(express.static); // keeping files in the public folder for local
 APP.use(express.json()); // to handle the json() caming data
