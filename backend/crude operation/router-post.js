@@ -25,7 +25,7 @@ const sideBuisness = mongoose.model("sideBuisness", employerSchema);
 const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
   cb(null, path.join(__dirname,"../files"))}, // this is temporary storage for cloudinary storage
  filename: (req, file, cb)=>{
-  cb(null, Date.now() + "_" + file.originalname)  
+  cb(null,file.originalname)  
  }});
  const upload = multer({storage: uploadFileLocation, limits: {fileSize: 5*1024*1024}}); 
 router.post("/contact",upload.single("uploadFile"), async (req,res)=>{ 
