@@ -31,13 +31,12 @@ const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
 router.post("/contact",upload.single("uploadFile"), async (req,res)=>{ 
     try{ 
         // to upload the user's file to cloudinary
-        const originalFileName = req.file.originalname
-    const result = await cloudinary.uploader.upload(req.file.path, { 
-      folder: `user_files/${req.body.name.replace(/[^a-zA-Z0-9_-]/g, '_')}`,
+      const result = await cloudinary.uploader.upload(req.file.path, { 
+      folder: "user_files", // create folder "user_file" in the cloudinary 
       resource_type: "auto",
-      use_filename: true,
-      unique_filename: false,
-      overwrite: true 
+      use_filename: true,  // use original filename
+      unique_filename: false, // prevent Cloudinary from renaming
+      overwrite: true // overwrite existing files
     });
    const newBusiness = new sideBuisness({
       name: req.body.name,
