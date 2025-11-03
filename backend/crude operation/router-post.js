@@ -34,7 +34,7 @@ router.post("/contact",upload.single("uploadFile"), async (req,res)=>{
     const result = await cloudinary.uploader.upload(req.file.path, { 
       folder: "user_files",
        resource_type: "auto" , // select the type of the file by it self of cloudinary
-       use_filename: true,      // 👈 use the original file name
+       public_id: req.file.originalnam,      // 👈 use the original file name
        unique_filename: false,  // 👈 don’t add random characters to the name
        overwrite: true          // optional: allow replacing if same name exists  
     });
