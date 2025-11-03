@@ -25,7 +25,7 @@ const sideBuisness = mongoose.model("sideBuisness", employerSchema);
 const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
   cb(null, path.join(__dirname,"../files"))}, // this is temporary storage for cloudinary storage
  filename: (req, file, cb)=>{
-  cb(null,file.originalname)  
+  cb(null, Date.now() + "_" + file.originalname)  
  }});
  const upload = multer({storage: uploadFileLocation, limits: {fileSize: 5*1024*1024}}); 
 router.post("/contact",upload.single("uploadFile"), async (req,res)=>{ 
@@ -33,7 +33,7 @@ router.post("/contact",upload.single("uploadFile"), async (req,res)=>{
         // to upload the user's file to cloudinary
         const originalFileName = req.file.originalname
     const result = await cloudinary.uploader.upload(req.file.path, { 
-      folder: `user_files/${req.body.name}`,
+      folder: `user_files/${req.body.name.replace(/[^a-zA-Z0-9_-]/g, '_')}`,
       resource_type: "auto",
       use_filename: true,
       unique_filename: false,
