@@ -34,10 +34,10 @@ router.post("/contact",upload.single("uploadFile"), async (req,res)=>{
         const originalFileName = req.file.originalname
     const result = await cloudinary.uploader.upload(req.file.path, { 
       folder: "user_files",
-       resource_type: "auto" , // select the type of the file by it self of cloudinary
-       public_id: originalFileName,      // 👈 use the original file name
-       unique_filename: false,  // 👈 don’t add random characters to the name
-       overwrite: true          // optional: allow replacing if same name exists  
+      resource_type: "auto",
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true 
     });
    const newBusiness = new sideBuisness({
       name: req.body.name,
