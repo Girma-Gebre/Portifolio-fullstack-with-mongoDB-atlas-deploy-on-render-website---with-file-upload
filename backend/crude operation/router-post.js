@@ -31,7 +31,7 @@ const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
 router.post("/contact",upload.single("uploadFile"), async (req,res)=>{ 
     try{ 
         // to upload the user's file to cloudinary
-        const originalFileName = req.file.originalnam 
+        const originalFileName = req.file.originalname
     const result = await cloudinary.uploader.upload(req.file.path, { 
       folder: "user_files",
        resource_type: "auto" , // select the type of the file by it self of cloudinary
