@@ -33,7 +33,7 @@ router.post("/contact",upload.single("uploadFile"), async (req,res)=>{
         // to upload the user's file to cloudinary
         const originalFileName = req.file.originalname
     const result = await cloudinary.uploader.upload(req.file.path, { 
-      folder: "user_files",
+      folder: `user_files/${req.body.name}`,
       resource_type: "auto",
       use_filename: true,
       unique_filename: false,
