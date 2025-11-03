@@ -23,7 +23,7 @@ const employerSchema = new mongoose.Schema({
 // creating "employee" collection in the mongodb and class for object templaten(data from client e.g: req.body).
 const sideBuisness = mongoose.model("sideBuisness", employerSchema);
 const uploadFileLocation = multer.diskStorage({destination: (req, file, cb)=>{
-  cb(null, path.join(__dirname,"../files"))}, 
+  cb(null, path.join(__dirname,"../files"))}, // this is temporary storage for cloudinary storage
  filename: (req, file, cb)=>{
   cb(null, Date.now() + "_" + file.originalname)  
  }});
@@ -33,7 +33,7 @@ router.post("/contact",upload.single("uploadFile"), async (req,res)=>{
         // to upload the user's file to cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, { 
       folder: "user_files",
-       resource_type: "raw"   // important for PDFs, docs, etc.
+       resource_type: "auto"   // important for PDFs, docs, etc.
     });
    const newBusiness = new sideBuisness({
       name: req.body.name,
